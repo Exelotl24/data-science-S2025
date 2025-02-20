@@ -110,7 +110,7 @@ following from your command line:
 
 ```{bash, eval=FALSE}
 # Move to your data science directory
-$ ~/path/to/your/data-science-work # Replace with your real directory!
+$ ~/path/to/your/data-science-S2025
 # Add the special .gitignore file
 $ touch p01-name/data/.gitignore
 ```

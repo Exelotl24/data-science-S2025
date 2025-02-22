@@ -97,15 +97,9 @@ document your observations.
 
 ``` r
 ## TASK: Plot `price` vs `carat` below
-ggplot(
-  data = diamonds
-) + 
-  geom_point(
-    mapping = aes(
-      x = carat,
-      y = price
-    )
-  )
+diamonds %>% 
+  ggplot() +
+  geom_point(aes(x = carat, y = price))
 ```
 
 ![](c00-diamonds-assignment_files/figure-gfm/q1-task-1.png)<!-- -->
@@ -113,28 +107,24 @@ ggplot(
 **Observations**:
 
 - As carat increases, price generally increases
-- Not a very distinct trendline or general trend as carat increases
+- Not a very distinct trendline, however there is definately a
+  correlation between carat and price, but it may not be linear.
 
 ### **q2** Create a visualization showing variables `carat`, `price`, and `cut` simultaneously. Experiment with which variable you assign to which aesthetic (`x`, `y`, etc.) to find an effective visual.
 
 ``` r
-## TASK: Plot `price`, `carat`, and `cut` below
-ggplot(data = diamonds) +
-  geom_point(
-    mapping = aes(
-      x = carat,
-      y = price,
-      color = cut
-       
-    )
-  )
+# ## TASK: Plot `price`, `carat`, and `cut` below
+diamonds %>% 
+  ggplot() +
+  geom_point(aes(x = carat, y = price, color = cut))
 ```
 
 ![](c00-diamonds-assignment_files/figure-gfm/q2-task-1.png)<!-- -->
 
 **Observations**:
 
-- As carat increases, price increases
+- As carat increases, price generally increases, however it may not be a
+  linear relationship
 - Ideal cuts tend to be more expensive than fair cuts, however premium
   and ideal cuts have varying prices compared to each other
 

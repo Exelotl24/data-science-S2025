@@ -28,7 +28,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -58,41 +58,29 @@ In this first stage, you will explore the `diamonds` dataset and document your o
 
 ```{r q1-task}
 ## TASK: Plot `price` vs `carat` below
-ggplot(
-  data = diamonds
-) + 
-  geom_point(
-    mapping = aes(
-      x = carat,
-      y = price
-    )
-  )
+diamonds %>% 
+  ggplot() +
+  geom_point(aes(x = carat, y = price))
 ```
 
 **Observations**:
 
 -   As carat increases, price generally increases
--   Not a very distinct trendline or general trend as carat increases
+-   Not a very distinct trendline, however there is definately a correlation between carat and price, but it may not be linear.
 
 ### **q2** Create a visualization showing variables `carat`, `price`, and `cut` simultaneously. Experiment with which variable you assign to which aesthetic (`x`, `y`, etc.) to find an effective visual.
 
 ```{r q2-task}
-## TASK: Plot `price`, `carat`, and `cut` below
-ggplot(data = diamonds) +
-  geom_point(
-    mapping = aes(
-      x = carat,
-      y = price,
-      color = cut
-       
-    )
-  )
+# ## TASK: Plot `price`, `carat`, and `cut` below
+diamonds %>% 
+  ggplot() +
+  geom_point(aes(x = carat, y = price, color = cut))
   
 ```
 
 **Observations**:
 
--   As carat increases, price increases
+-   As carat increases, price generally increases, however it may not be a linear relationship
 -   Ideal cuts tend to be more expensive than fair cuts, however premium and ideal cuts have varying prices compared to each other
 
 # Communication

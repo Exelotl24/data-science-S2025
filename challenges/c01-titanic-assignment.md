@@ -218,8 +218,8 @@ df_prop %>%
 **Observations**:
 
 - Write your observations here.
-  - This plot suggests that an equal number of men and women in 1st and
-    2nd class survived, and that proportionally, more women survived
+  - This plot suggests that an equal propotion of men and women in 1st
+    and 2nd class survived, and that proportionally, more women survived
     than men in the 3rd class and crew.
 - Is there anything *fishy* going on in your plot?
   - Yes, based on the previous graph, we know that more women survived

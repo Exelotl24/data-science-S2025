@@ -158,13 +158,14 @@ df_q1 <-
 | 2            |  39 |     299858.5 |
 | 1            |  15 |     299808.0 |
 
-**Observations**: - Write your observations here! - Generally, as
-distinctness of the images decreases, mean velocity of light decreases
-as well. The difference between distinctnesses of 3 and 1 is noticably
-less than the difference between 2 and 1. - Why might your table differ
-from Michelson’s? - It looks like there is a difference with the
-significant figures in Michelson’s data, my table does not have a limit
-on significant figures and Michelson’s has 5.
+**Observations**: - Write your observations here! - Generally there is
+not a meaningful difference between the mean velocity values as
+distinctness changes. The difference values between distinctness of 1-3
+and 2-3 are quite similar at 53.7 and 50.8 respectively.
+
+Why might your table differ from Michelson’s? - It looks like there is a
+difference with the significant figures in Michelson’s data, my table
+does not have a limit on significant figures and Michelson’s has 5.
 
 The `Velocity` values in the dataset are the speed of light *in air*;
 Michelson introduced a couple of adjustments to estimate the speed of
@@ -322,9 +323,13 @@ df_q2 %>%
 **Observations**: Similarities - The mean for both the simulated and
 real measurements are the same, so are the positive and negative error
 values. Certain means for each day are similar between the graphs, such
-as on Jun 16. Differences - the line that represents the mean for each
-day as well as the data point for each day are different and differ from
-the real measurements almost randomly.
+as on Jun 16.
+
+Differences - The real mean values for each day tend to have more
+“dramatic” spikes (ones that fall outside of the control limits), as
+this graph has three spikes of that nature, while the simulated graph
+only has two. The simulated graph also tends to have more individual
+data points that lay close to the median line than the real data.
 
 ### **q5** You have access to a few other variables. Construct a **at least three** visualizations of `VelocityVacuum` against these other factors. Are there other patterns in the data that might help explain the difference between Michelson’s estimate and `LIGHTSPEED_VACUUM`?
 
@@ -336,7 +341,7 @@ df_michelson <-
 ggplot(
   data = df_michelson
 ) + 
-  geom_line(
+  geom_point(
     mapping = aes(
       x = Temp,
       y = VelocityVacuum
@@ -348,17 +353,16 @@ ggplot(
 
 **Observations**:
 
-- The velocity in a vacuum overall trends upwards as temperature
-  increases, however there is much variation in the graph. This can help
-  explain the difference between the LIGHTSPEED_VACUUM and Michelson’s
-  data as temperature changes, as well as other possible instrumentation
-  errors or atmospheric effects.
+- The velocity in a vacuum overall slight trends upwards as temperature
+  increases, however there is much variation in the graph. This is not a
+  possible explanation for the difference between LIGHTSPEED_VACUUM and
+  Michelson’s data as the data varies greatly.
 
 ``` r
 ggplot(
   data = df_michelson
-) + 
-  geom_col( 
+) +
+  geom_jitter(
     mapping = aes(
       x = Distinctness,
       y = VelocityVacuum,
@@ -370,7 +374,7 @@ ggplot(
 
 **Observations**:
 
-- This graph shows that there is overall an upward trend between
+- This graph shows that there is overall a slight upward trend between
   velocity in a vacuum and distinctness, however the difference between
   2 and 3 distinctness is significantly less than the difference from 1
   to 2. This could potentially lead to fluctuations in Michelson’s data,

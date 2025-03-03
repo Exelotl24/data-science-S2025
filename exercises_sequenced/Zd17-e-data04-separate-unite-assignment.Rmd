@@ -120,10 +120,20 @@ tribble(
 
 ### **q1** Use a combination of `unite` and pivoting to turn `genes` into the same dataframe as `punnett`.
 
+```{r}
+glimpse(genes)
+glimpse(punnett)
+```
+
 ```{r q1-task}
 df_q1 <-
   genes %>%
-## TODO: pivot and unite here!
+unite(col = "offspring", sep = "", remove = FALSE, parent1, parent2) %>% 
+  pivot_wider(
+    names_from = (parent2),
+    values_from = (offspring)
+  )
+
 
 df_q1
 ```
@@ -163,7 +173,21 @@ This *slightly modified* version of the data no longer has a convenient separato
 ```{r q2-task}
 df_q2 <-
   alloys_mod %>%
-## TODO: pivot and separate here!
+pivot_longer(
+  names_to = "varang",
+  values_to = "value",
+  cols = c(-thick, -rep)
+) %>% 
+separate(
+  col = varang,
+  into = c("var", "angle"),
+  sep = -2,
+  convert = TRUE
+) %>% 
+  pivot_wider(
+    names_from = var,
+    values_from = value
+  )
 
 df_q2
 ```

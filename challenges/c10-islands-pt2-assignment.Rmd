@@ -179,6 +179,16 @@ There was not a strong correlation between:
 
 Connect your Key Analyses to your questions / hypotheses. What did you conclude from your study?
 
-Overall, we concluded that serotonin is not an insightful metric for studying the overall mood of the older islanders. While we had hoped serotonin could be a proxy for happiness, the serotonin levels in the islander's lives did not appear to be affected by environmental factors such as number of friends, income, or recent deaths. Further, serotonin levels were very consistent day to day when measured several days apart, showing no major variation. If the islanders have moods, day to day variation did not appear to influence serotonin levels.
+Overall, we concluded that serotonin is not an insightful metric for studying the overall happiness of the older islanders. While we had hoped serotonin could be a proxy for happiness, the serotonin levels in the islander's lives did not appear to be affected by environmental factors such as number of friends, income, or recent deaths. Further, serotonin levels were very consistent day to day when measured several days apart, showing no major variation. If the islanders have moods, day to day variation did not appear to influence serotonin levels.
 
-While we don't know how the islander's serotonin level is computed, in humans, research suggests
+In real humans, research suggests that, contrary to popular beliefs, doing things that make you "happy" doesn't necessarily correlate to a "serotonin boost" [1]. Rather, the relationship is more of a pre-requisite, where adequate serotonin levels enable such experiences while a decreased serotonin level leads to depression. Most healthcare sources state that the best interventions to increase serotonin are through more physical behaviors - getting more sunlight, exercising, eating more tryptophan (an amino acid that aids in serotonin production) rich fruits and vegetables - rather than the social behaviors we tested for in this study [2]. This research helps to explain the lack of correlation between the variables observed in our study and the serotonin levels given that we focused mainly on the impact of social behaviors.
+
+Without additional data that could more accurately quantify the islander's mood, it is hard to discern whether the inconclusiveness of our collected data results from serotonin not being an accurate proxy for happiness, or whether the values studied truly do not influence the objective happiness of an islander.
+
+Further, it is important to qualify these results with the fact that the islanders are not real people. Despite the incredible detail that exists in this simulation, the islanders don't in fact have real brain chemistry, and little is publicly documented about how the huge number of metrics available about each islander is calculated. As such, for something as individual and bio-driven (and presumably hard to accurately model) that serves as one small statistic among a sea of possible survey topics, the real-world accuracy of the covariance between serotonin and other factors is unknown at best.
+
+Sources:
+
+[1] Cleveland Clinic, “Serotonin,” *Cleveland Clinic*, Mar. 18, 2022. <https://my.clevelandclinic.org/health/articles/22572-serotonin>
+
+[2] S. Watson, “Serotonin: The natural mood booster,” *Harvard Health*, Nov. 20, 2023. <https://www.health.harvard.edu/mind-and-mood/serotonin-the-natural-mood-booster>

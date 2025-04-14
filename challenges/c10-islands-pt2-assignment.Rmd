@@ -28,7 +28,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -57,41 +57,71 @@ library(rsample)
 
 While you provided this plan in c08 (Part 1), please include your plan here. In particular, describe how you updated your plan in response to feedback.
 
-#### Population
+#### **Population**
 
--   (What population are you going to study?)
-    -   All of the Islanders? Only the residents of Helvig? Participants meeting certain criteria (in which case, you need to list *covariates*)?
+-   We’re interested specifically in studying older adults who are close to the retirement age, ages roughly 60-65. To narrow down our population, we are studying only the residents in Arcadia. We are aiming for 10% of this population
 
-#### Quantity of interest
+#### **Quantity of interest**
 
--   (Write your quantity of interest here)
+-   Relative “happiness” of the people being studied, quantified through serotonin.
 
-#### Covariates
+-   Number of current friends
 
--   (Write any relevant covariates here)
--   (There's probably more than one!)
+    -   Counting all the platonic relationships formed and lasted to current day
 
-#### Observation or experiment?
+    -   Ex. a childhood friend from age 12 that died at age 45 would not count
 
-The Islands allows you to ask islanders to complete tasks. If you just take measurements on your participants, then it's an *observational study*. But if you also introduce something that's meant to change the outcome of a measurement (e.g., drinking coffee before taking a test), that's called an *experimental study*. You need to decide whether your study is observational or experimental.
+    -   Ex. a spouse does not count as a friend. 
 
--   (Observation or experiment?)
+#### **Covariates**
 
-#### Question / Hypothesis
+-   Income
 
--   (Write your question / hypothesis here)
-    -   This could be an observational question, like "How are X and Y related in the population?"
-    -   This could be an experimental question, like "What effect does X have on Y in the population?"
+    -   Level of income could be a covariate that affects the level of measured happiness
 
-#### Sampling plan
+-   Job Status
 
--   (What steps will you take to collect the data?)
-    -   Be specific. For instance, if you're going to collect a random sample, how will you enumerate all of the things to be sampled?
-    -   Write a protocol. Document step-by-step instructions that your team will follow. That way, you can feasibly split up data collection among the whole team, while making sure each team member doesn't make ad hoc decisions that introduce bias into your results.
--   (How will you ensure the data is representative of your chosen population?)
--   (For experiments only: How will you ensure any effects you observe are due to the treatment, and not due to other factors?)
--   (How will you choose your sample size?)
-    -   This should be a mix of how confident you want to be in your results, and what is actually *feasible* for your research team.
+    -   Being retired or still working could be a covariate that affects the levels of happiness
+
+-   Recent loss (death) in past two years 
+
+    -   Experiencing a recent death could be a covariate that affects the level of measured happiness despite number of current friends
+
+-   Relationship status
+
+    -   Having a current partner could be a covariate that affects the level of measured happiness
+
+-   Serotonin variance over time 
+
+    -   Serotonin measures mood so it is possible that a given participant has a non-stable mood and could be a covariate that affects the level of measured happiness
+
+        -   To do this we took a second measurement of serotonin after several hours to see if there was variability for any participants
+
+#### **Observation or experiment?**
+
+The Islands allows you to ask islanders to complete tasks. If you just take measurements on your participants, then it's an observational study. But if you also introduce something that's meant to change the outcome of a measurement (e.g., drinking coffee before taking a test), that's called an experimental study. You need to decide whether your study is observational or experimental.
+
+-   This is an observational study
+
+#### **Question / Hypothesis**
+
+-   How are the number of lasting friendships and serotonin levels related in older adults in Arcadia?
+
+**Sampling plan**
+
+-   To collect this group of people we went into the birth records for Arcadia and randomly selected individuals from the total list. 
+
+    -   We first took a full list of individuals born during selected years 300-305 and pasted them into a google sheet and in a new tab randomly selected 10% of the total population pool.
+
+    -   For individuals who were deceased or did not give consent we chose the immediate next available person from the list.
+
+-   In the same spreadsheet we documented the primary quantity of interest (number of lasting friendships) and all the of the aforementioned covariates
+
+    -   Counting the number of lasting friendships was done manually going through each surveyor’s timeline
+
+    -   All other covariates were lifted straight from the surveyor’s bio
+
+-   This random sampling of 10% of the will ensure a representative sample while still maintaining a feasible sample size for us conducting the survey
 
 ### **q2** EDA
 
@@ -103,7 +133,7 @@ island_csv <- "./data/Data Science C10 - Sheet2 (1).csv"
 df_island <-
   read_csv(
     island_csv,
-  ) %>% 
+  ) %>%
   rename(
     Serotonin = "Serotonin (ng/mL)",
     `Serotonin 2` = "Serotonin 2 (ng/mL)",
@@ -113,52 +143,57 @@ df_island
 ```
 
 ```{r}
-df_island %>% 
-ggplot(
-  aes(x = `Number of Friends`, y = Serotonin, color = Income)) +
+df_island %>%
+  ggplot(
+    aes(x = `Number of Friends`, y = Serotonin, color = Income)
+  ) +
   geom_point() +
-  scale_color_gradient(low = "deepskyblue", high = "darkred") 
+  scale_color_gradient(low = "deepskyblue", high = "darkred")
 ```
 
 ```{r}
-df_island %>% 
-ggplot(
-  aes(x = Income, y = `Number of Friends`)) +
-  geom_point(color = "gray8") + 
+df_island %>%
+  ggplot(
+    aes(x = Income, y = `Number of Friends`)
+  ) +
+  geom_point(color = "gray8") +
   geom_smooth(color = "olivedrab")
 ```
 
 ```{r}
-df_island %>% 
-ggplot(
-  aes(x = `Relationship Status`, y = Serotonin)) +
+df_island %>%
+  ggplot(
+    aes(x = `Relationship Status`, y = Serotonin)
+  ) +
   geom_boxplot(color = "darkred")
-  labs(
-    title = "Income vs. Serotonin Levels",
-    x = "Islander's Total Money",
-    y = "Serotonin Levels (ng/mL)",
-  )
+labs(
+  title = "Income vs. Serotonin Levels",
+  x = "Islander's Total Money",
+  y = "Serotonin Levels (ng/mL)",
+)
 ```
 
 ```{r}
-df_island %>% 
-ggplot(
-  aes(x = as.character(Loss), y = Serotonin)) +
+df_island %>%
+  ggplot(
+    aes(x = as.character(Loss), y = Serotonin)
+  ) +
   geom_boxplot(color = "aquamarine4")
-  labs(
-    title = "Income vs. Serotonin Levels",
-    x = "Islander's Total Money",
-    y = "Serotonin Levels (ng/mL)",
-  )
+labs(
+  title = "Income vs. Serotonin Levels",
+  x = "Islander's Total Money",
+  y = "Serotonin Levels (ng/mL)",
+)
 ```
 
 ```{r}
 df_island %>%
   group_by(`Number of Friends`) %>%
-  summarize(mean = mean(Serotonin)) %>% 
+  summarize(mean = mean(Serotonin)) %>%
   ggplot(
-    aes(x = `Number of Friends`, y = mean)) +
-    geom_col(fill = "peru")
+    aes(x = `Number of Friends`, y = mean)
+  ) +
+  geom_col(fill = "peru")
 ```
 
 ### **q3** Key Analyses

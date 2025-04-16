@@ -170,7 +170,8 @@ ggplot(df_long, aes(x = MIC, y = bacteria, color = gram)) +
        x = "MIC (log scale)",
        y = "Bacteria",
        color = "Gram Stain") +
-  theme(axis.text.y = element_text(size = 8),
+  theme(axis.text.y = element_text(angle = 45, hjust = 1),
+        axis.text.x = element_text(angle = 45, hjust = 1),
         strip.text = element_text(size = 12, face = "bold"))
 ```
 
@@ -197,6 +198,7 @@ ggplot(df_long, aes(x = bacteria, y = MIC, fill = gram)) +
   geom_bar(stat = "identity", position = "dodge", aes(fill = antibiotic)) +
   scale_y_log10() + 
   coord_flip() +  
+    facet_wrap(~ gram, scales = "free_y") +
   theme_minimal() +
   labs(title = "MIC Values for Different Bacteria and Antibiotics",
        x = "Bacteria",
@@ -250,27 +252,24 @@ your other visuals.
 
 ``` r
 df_long <- df_antibiotics %>%
-  pivot_longer(cols = c(penicillin), 
+  pivot_longer(cols = c(penicillin, ), 
                names_to = "antibiotic", 
                values_to = "MIC")
 
-ggplot(df_long, aes(x = antibiotic, y = MIC, color = gram)) +
-  geom_boxplot(outlier.shape = NA, alpha = 0.6) + 
-  geom_point(aes(shape = gram), width = 0.2, size = 3, alpha = 0.8) +  
-  scale_y_log10() +  
+ggplot(df_long, aes(x = reorder(bacteria, MIC), y = MIC, color = gram)) +
+  geom_point(size = 3, aes(shape = gram)) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "black") +
+  scale_y_log10() +
+  coord_flip() +
   theme_minimal() +
-  labs(title = "Distribution of MIC Values for Different Antibiotics",
-       x = "Antibiotic",
-       y = "MIC (log scale)",
-       color = "Gram Stain",
-       shape = "Gram Stain") +
-  theme(axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 10),
-        legend.position = "bottom")
+  labs(
+    title = "MIC Values for Penicillin by Bacteria",
+    x = "Bacteria",
+    y = "MIC (log scale)",
+    color = "Gram Stain",
+    shape = "Gram Stain"
+  ) 
 ```
-
-    ## Warning in geom_point(aes(shape = gram), width = 0.2, size = 3, alpha = 0.8):
-    ## Ignoring unknown parameters: `width`
 
 ![](c05-antibiotics-assignment_files/figure-gfm/q1.4-1.png)<!-- -->
 
@@ -288,16 +287,23 @@ df_long <- df_antibiotics %>%
   pivot_longer(cols = c(neomycin), 
                names_to = "antibiotic", 
                values_to = "MIC")
-ggplot(df_long, aes(x = antibiotic, y = bacteria, size = MIC, color = gram)) +
-  geom_count(alpha = 0.7) +
-  scale_color_manual(values = c("negative" = "blue", "positive" = "red")) +  
-  theme_minimal() +
-  labs(title = "Effectiveness of Antibiotics by Bacteria",
-       x = "Antibiotic",
-       y = "Bacteria",
-       color = "Gram Stain") +
+ggplot(df_long, aes(x = antibiotic, y = reorder(bacteria, MIC), fill = MIC)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(
+    trans = "log10",
+    low = "lightyellow",
+    high = "darkred",
+    name = "MIC"
+  ) +
+  geom_text(aes(label = round(MIC, 2)), size = 3, color = "black") +
+  facet_wrap(~ gram, scales = "free_y") +
+  labs(
+    title = "Neomycin Effectiveness by Bacteria",
+    x = "Antibiotic",
+    y = "Bacteria"
+  ) +
   theme(axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 8),
+        axis.text.y = element_text(hjust = 1),
         legend.position = "bottom")
 ```
 
@@ -327,15 +333,14 @@ opportunity to think about why this is.**
 - What is your response to the question above?
 
   - The three antibiotics vary greatly in their effectiveness against
-    bacteria and gram stain. Streptomycin tended to have the lowest
-    magnitude MIC values throughout all of the bacteria genera and
-    penicillin tended to have the largest magnitude MIC values, with
-    neomycin having the most variation.
+    bacteria and gram stain. Streptomycin tended to have values
+    consistantly under the effectiveness threshold while penicillin
+    tended to have values greater than the effectiveness threshold.
 
 - Which of your visuals above (1 through 5) is **most effective** at
   helping to answer this question?
 
-  - Visual 2
+  - Visual 2 and 4
 
 <!-- -->
 

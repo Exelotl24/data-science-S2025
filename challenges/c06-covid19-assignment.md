@@ -165,15 +165,12 @@ To check your results, this is Table `B01003`.
 
 ``` r
 ## TASK: Load the census bureau data with the following tibble name.
-df_pop <- pop_columns <- "./data/ACSDT5Y2018.B01003-Column-Metadata.csv"
-pop_csv <- "./data/ACSDT5Y2018.B01003-Data.csv"
-
-df_pop <- read_csv(pop_csv, skip = 2, 
-                    na = "*****", 
-                    col_types = "ccd_d__", 
-                    col_names = c("id", 
-                                  "Geographic Area Name", 
-                                  "Estimate!!Total", 
+df_pop <- read_csv("./data/ACSDT5Y2018.B01003-Data.csv", skip = 2,
+                   na = "*****",
+                   col_types = "ccd_d__",
+                   col_names = c("id",
+                                 "Geographic Area Name",
+                                 "Estimate!!Total", 
                                   "Margin of Error!!Total"))
 ```
 
@@ -307,9 +304,12 @@ the NYT data `df_covid` already contains the `fips`.
 ``` r
 ## TASK: Create a `fips` column by extracting the county code
 df_q3 <- df_pop %>% 
-  mutate(fips = str_extract(id, "[^US]*$")) %>% 
-  select(-id) %>% 
-  select(fips, 'Geographic Area Name', 'Estimate!!Total', 'Margin of Error!!Total')
+  mutate(fips = str_extract(id, "\\d{5}$")) %>%
+  select(fips,
+    `Geographic Area Name`,
+    `Estimate!!Total`,
+    `Margin of Error!!Total`
+  )
 ```
 
 Use the following test to check your answer.
@@ -570,9 +570,16 @@ include in your summaries,* and justify why!
 
 ``` r
 ## TASK: Compute mean and sd for cases_per100k and deaths_per100k
-df_filtered <- df_normalized %>%
-  filter(!is.na(cases_per100k), !is.na(deaths_per100k), 'population' > 0)
 
+latest_date <- max(df_normalized$date, na.rm = TRUE)
+
+df_filtered <- df_normalized %>%
+  filter(
+    date == latest_date,
+    !is.na(cases_per100k),
+    !is.na(deaths_per100k),
+    population > 0
+  )
 summary_stats <- df_filtered %>%
   summarise(
     mean_cases_per100k = mean(cases_per100k, na.rm = TRUE),
@@ -587,15 +594,16 @@ summary_stats
     ## # A tibble: 1 × 4
     ##   mean_cases_per100k sd_cases_per100k mean_deaths_per100k sd_deaths_per100k
     ##                <dbl>            <dbl>               <dbl>             <dbl>
-    ## 1             10094.            8484.                174.              159.
+    ## 1             24967.            6174.                375.              160.
 
 - Which rows did you pick?
-  - All rows without NA values were chosen for the means and SDs and
-    rows where population = 0
+  - All rows without NA values on the latest date of the data set were
+    chosen for the means and SDs and rows where population = 0
 - Why?
   - NA values would have interefered with the calculations, and 0
     population would be meaningless when calculating cases and deaths
-    per 100k
+    per 100k. Showing all mean cases of every day also is not a very
+    meaningful quantity to compute
 
 ### **q7** Find and compare the top 10
 
@@ -606,58 +614,75 @@ you found in q6. Note any observations.
 
 ``` r
 ## TASK: Find the top 10 max cases_per100k counties; report populations as well
-top_cases <- df_filtered %>%
+top_cases <- df_normalized%>%
+  filter(
+    !is.na(cases_per100k),
+    !is.na(deaths_per100k),
+    population > 0
+  ) %>% 
+  group_by(county) %>%
+  slice_max(cases_per100k, n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
+  select(county, date, cases_per100k, population) %>%
   arrange(desc(cases_per100k)) %>%
-  select('county', 'population', 'date', cases_per100k) %>%
-  head(10)
+  slice_head(n = 10)
+
 
 ## TASK: Find the top 10 deaths_per100k counties; report populations as well
-top_deaths <- df_filtered %>%
+top_deaths <- df_normalized %>%
+  filter(
+    !is.na(cases_per100k),
+    !is.na(deaths_per100k),
+    population > 0
+  ) %>% 
+  group_by(county) %>%
+  slice_max(deaths_per100k, n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
+  select(county, date, deaths_per100k, population) %>%
   arrange(desc(deaths_per100k)) %>%
-  select('county', 'population', 'date', deaths_per100k) %>%
-  head(10)
+  slice_head(n = 10)
 
 top_deaths
 ```
 
     ## # A tibble: 10 × 4
-    ##    county   population date       deaths_per100k
-    ##    <chr>         <dbl> <date>              <dbl>
-    ##  1 McMullen        662 2022-02-19          1360.
-    ##  2 McMullen        662 2022-02-20          1360.
-    ##  3 McMullen        662 2022-02-21          1360.
-    ##  4 McMullen        662 2022-02-22          1360.
-    ##  5 McMullen        662 2022-02-23          1360.
-    ##  6 McMullen        662 2022-02-24          1360.
-    ##  7 McMullen        662 2022-02-25          1360.
-    ##  8 McMullen        662 2022-02-26          1360.
-    ##  9 McMullen        662 2022-02-27          1360.
-    ## 10 McMullen        662 2022-02-28          1360.
+    ##    county            date       deaths_per100k population
+    ##    <chr>             <date>              <dbl>      <dbl>
+    ##  1 McMullen          2022-02-19          1360.        662
+    ##  2 Galax city        2022-04-27          1175.       6638
+    ##  3 Motley            2022-03-10          1125.       1156
+    ##  4 Hancock           2022-04-20          1054.       8535
+    ##  5 Emporia city      2022-04-19          1022.       5381
+    ##  6 Towns             2022-04-27          1016.      11417
+    ##  7 Jerauld           2022-02-14           986.       2029
+    ##  8 Loving            2022-03-04           980.        102
+    ##  9 Robertson         2022-02-03           980.       2143
+    ## 10 Martinsville city 2022-05-05           946.      13101
 
 ``` r
 top_cases
 ```
 
     ## # A tibble: 10 × 4
-    ##    county population date       cases_per100k
-    ##    <chr>       <dbl> <date>             <dbl>
-    ##  1 Loving        102 2022-05-12       192157.
-    ##  2 Loving        102 2022-05-13       192157.
-    ##  3 Loving        102 2022-05-09       191176.
-    ##  4 Loving        102 2022-05-10       191176.
-    ##  5 Loving        102 2022-05-11       191176.
-    ##  6 Loving        102 2022-05-08       190196.
-    ##  7 Loving        102 2022-05-07       188235.
-    ##  8 Loving        102 2022-05-05       187255.
-    ##  9 Loving        102 2022-05-06       187255.
-    ## 10 Loving        102 2022-05-04       186275.
+    ##    county                   date       cases_per100k population
+    ##    <chr>                    <date>             <dbl>      <dbl>
+    ##  1 Loving                   2022-05-12       192157.        102
+    ##  2 Chattahoochee            2022-05-11        69527.      10767
+    ##  3 Nome Census Area         2022-05-11        62922.       9925
+    ##  4 Northwest Arctic Borough 2022-05-11        62542.       7734
+    ##  5 Crowley                  2022-05-13        59449.       5630
+    ##  6 Bethel Census Area       2022-05-11        57439.      18040
+    ##  7 Dewey                    2022-03-30        54317.       5779
+    ##  8 Dimmit                   2022-05-12        54019.      10663
+    ##  9 Jim Hogg                 2022-05-12        50133.       5282
+    ## 10 Kusilvak Census Area     2022-05-11        49817.       8198
 
 **Observations**:
 
-- The top cases all belong to the same county of Loving and all top
-  deaths belong to the same county of McMullen. Both of these counties
-  have rather small populations, with Loving having a population of 102
-  and McMullen having a population of 662
+- Loving county had the most cases by quite a bit especially for having
+  a very small population of 102. McMullen also had the most deaths,
+  however not by as large a margin as Loving, and it also has a rather
+  small population of 662.
 - When did these “largest values” occur?
   - The largest values for cases all happened in may of 2022 and the
     value for deaths occurred in february of 2022.
@@ -692,7 +717,7 @@ df_filtered %>%
     aes(x = population, y = deaths_per100k, color = fct_reorder2(county, population, cases_per100k))
    ) +
   geom_point() +
-   theme_minimal() 
+   scale_color_discrete(guide = 'none') 
 ```
 
 ![](c06-covid19-assignment_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
@@ -728,12 +753,8 @@ df_normalized %>%
     aes(date, deaths_per100k)
    ) +
   geom_line() +
-   theme_minimal() 
-```
+   
 
-![](c06-covid19-assignment_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
-
-``` r
 labs(
   title = "Deaths per 100k in Richmond, VA",
     x = "Date",
@@ -741,17 +762,7 @@ labs(
   )
 ```
 
-    ## $x
-    ## [1] "Date"
-    ## 
-    ## $y
-    ## [1] "Cases (per 100,000 persons)"
-    ## 
-    ## $title
-    ## [1] "Deaths per 100k in Richmond, VA"
-    ## 
-    ## attr(,"class")
-    ## [1] "labels"
+![](c06-covid19-assignment_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
 
 **Obervations:**
 

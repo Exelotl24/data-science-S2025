@@ -72,7 +72,7 @@ Note that these data are not tidy! The data in this form are convenient for repo
 ## TASK: Tidy `df_stang`
 df_stang_long <-
   df_stang %>% 
-pivot_longer(
+  pivot_longer(
     names_to = c(".value", "angle"),
     names_sep = "_",
     cols = starts_with(c("E", "nu"))
@@ -115,6 +115,10 @@ print("Very good!")
 
 ```{r q2-task}
 glimpse(df_stang_long)
+df_stang_long %>%
+  distinct(alloy)
+df_stang_long %>%
+  distinct(thick)
 ```
 
 **Observations**:
@@ -137,9 +141,8 @@ glimpse(df_stang_long)
 
 ```{r q3-task}
 ## TASK: Investigate your question from q1 here
-ggplot(
-  data = df_stang_long
-) + 
+df_stang_long %>% 
+ggplot() + 
   geom_count(
     mapping = aes(
       x = thick,

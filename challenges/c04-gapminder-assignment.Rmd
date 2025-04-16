@@ -24,7 +24,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -199,23 +199,34 @@ gapminder %>%
 
 ```{r q4-task}
 
-data <- gapminder %>%
-  filter(year %in% c(year_min, year_max))
-
-ggplot(data, aes(x = continent, 
-                 y = gdpPercap, 
-                 group = interaction(continent, factor(year)))) +
-  geom_boxplot(aes(color = factor(year))) + # Boxplots colored by year
-  geom_point(data = data %>% 
-               filter(country %in% c("Kuwait", "Switzerland", "United States")),
-             aes(x = continent, y = gdpPercap, color = country), 
-             position = position_dodge(width = 0.75)) + 
-  scale_color_manual(
-    values = c("orange", "black", "red", "green", "blue"),
-    labels = c(year_min, year_max, "United States", "Kuwait", "Switzerland")
+gapminder %>%
+  filter(year %in% c(year_min, year_max)) %>%
+  ggplot(aes(
+    x = continent,
+    y = gdpPercap,
+    group = interaction(continent, factor(year))
+  )) +
+  geom_boxplot(aes(color = factor(year))) +  # Color by year
+  geom_point(
+    data = . %>%
+      filter(country %in% c("Kuwait", "Switzerland", "United States")),
+    aes(color = country),
+    position = position_dodge(width = 0.75)
   ) +
-  labs(color = "Country / Year")
-
+  scale_color_manual(
+    name = NULL,
+    values = setNames(
+      c("orange", "black", "red", "green", "blue"),
+      c(as.character(year_min), as.character(year_max),
+        "United States", "Kuwait", "Switzerland")
+    )
+  ) +
+  guides(color = guide_legend(override.aes = list(size = 3))) +
+  labs(
+    x = "Continent",
+    y = "GDP per Capita",
+    color = "Country or Year"
+  )
 ```
 
 **Observations**:
@@ -235,10 +246,13 @@ Now it's your turn! We just went through guided EDA considering the GDP per capi
 gapminder %>% 
   filter(year == year_min) %>% 
   ggplot() + 
-  geom_jitter(aes(x = gdpPercap, y = lifeExp))
+  geom_jitter(aes(x = gdpPercap, y = lifeExp)) +
+  scale_x_log10()
+
+
 ```
 
--   There is a general trend where as life expectancy increaces, gdp per capita also increases across all continents in 1952, I am curious about GDP over time to see how it changes.
+-   There is a general trend, with a noticeable outlier, where as life expectancy increases, gdp per capita also increases across almost all continents in 1952, I am curious about GDP over time to see how it changes.
 
 ```{r q5-task2}
 ## TASK: Your second graph

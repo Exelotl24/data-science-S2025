@@ -1027,7 +1027,7 @@ gap_with_colors
     ## 888                   Lesotho    Africa 2007 42.59200    2012649   1569.3314
     ## 889                   Liberia    Africa 1952 38.48000     863308    575.5730
     ## 890                   Liberia    Africa 1957 39.48600     975950    620.9700
-    ## 891                   Liberia    Africa 1962 40.50200    1112796    634.1952
+    ## "country_colors"                   Liberia    Africa 1962 40.50200    1112796    634.1952
     ## 892                   Liberia    Africa 1967 41.53600    1279406    713.6036
     ## 893                   Liberia    Africa 1972 42.61400    1482628    803.0055
     ## 894                   Liberia    Africa 1977 43.76400    1703617    640.3224
@@ -1532,7 +1532,7 @@ gap_with_colors
     ## 1393                  Somalia    Africa 1952 32.97800    2526994   1135.7498
     ## 1394                  Somalia    Africa 1957 34.97700    2780415   1258.1474
     ## 1395                  Somalia    Africa 1962 36.98100    3080153   1369.4883
-    ## "gapminder"                  Somalia    Africa 1967 38.97700    3428839   1284.7332
+    ## 1396                  Somalia    Africa 1967 38.97700    3428839   1284.7332
     ## 1397                  Somalia    Africa 1972 40.97300    3840161   1254.5761
     ## 1398                  Somalia    Africa 1977 41.97400    4353666   1450.9925
     ## 1399                  Somalia    Africa 1982 42.95500    5828892   1176.8070
@@ -3284,7 +3284,7 @@ gap_with_colors
     ## 1440 #AD8ABD
     ## 1441 #934607
     ## 1442 #934607
-    ## 1443 #934607
+    ## "gapminder" #934607
     ## 1444 #934607
     ## 1445 #934607
     ## 1446 #934607
@@ -3730,22 +3730,34 @@ gapminder %>%
 variables; think about using different aesthetics or facets.
 
 ``` r
-data <- gapminder %>%
-  filter(year %in% c(year_min, year_max))
-
-ggplot(data, aes(x = continent, 
-                 y = gdpPercap, 
-                 group = interaction(continent, factor(year)))) +
-  geom_boxplot(aes(color = factor(year))) + # Boxplots colored by year
-  geom_point(data = data %>% 
-               filter(country %in% c("Kuwait", "Switzerland", "United States")),
-             aes(x = continent, y = gdpPercap, color = country), 
-             position = position_dodge(width = 0.75)) + 
-  scale_color_manual(
-    values = c("orange", "black", "red", "green", "blue"),
-    labels = c(year_min, year_max, "United States", "Kuwait", "Switzerland")
+gapminder %>%
+  filter(year %in% c(year_min, year_max)) %>%
+  ggplot(aes(
+    x = continent,
+    y = gdpPercap,
+    group = interaction(continent, factor(year))
+  )) +
+  geom_boxplot(aes(color = factor(year))) +  # Color by year
+  geom_point(
+    data = . %>%
+      filter(country %in% c("Kuwait", "Switzerland", "United States")),
+    aes(color = country),
+    position = position_dodge(width = 0.75)
   ) +
-  labs(color = "Country / Year")
+  scale_color_manual(
+    name = NULL,
+    values = setNames(
+      c("orange", "black", "red", "green", "blue"),
+      c(as.character(year_min), as.character(year_max),
+        "United States", "Kuwait", "Switzerland")
+    )
+  ) +
+  guides(color = guide_legend(override.aes = list(size = 3))) +
+  labs(
+    x = "Continent",
+    y = "GDP per Capita",
+    color = "Country or Year"
+  )
 ```
 
 ![](c04-gapminder-assignment_files/figure-gfm/q4-task-1.png)<!-- -->
@@ -3772,14 +3784,16 @@ the relationship between variables, or something else entirely.
 gapminder %>% 
   filter(year == year_min) %>% 
   ggplot() + 
-  geom_jitter(aes(x = gdpPercap, y = lifeExp))
+  geom_jitter(aes(x = gdpPercap, y = lifeExp)) +
+  scale_x_log10()
 ```
 
 ![](c04-gapminder-assignment_files/figure-gfm/q5-task1-1.png)<!-- -->
 
-- There is a general trend where as life expectancy increaces, gdp per
-  capita also increases across all continents in 1952, I am curious
-  about GDP over time to see how it changes.
+- There is a general trend, with a noticeable outlier, where as life
+  expectancy increases, gdp per capita also increases across almost all
+  continents in 1952, I am curious about GDP over time to see how it
+  changes.
 
 ``` r
 ## TASK: Your second graph

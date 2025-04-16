@@ -306,17 +306,14 @@ df_stang_long %>%
 **Observations**:
 
 - Does this graph support or contradict the claim above?
-  - This graph does support the claim above, however the way the data is
-    presented in a way that may mislead the conclusion that someone
-    could make. As the thickness 0.081 generally has a lower elastic
-    modulus, the lower thicknesses show no correlation with elastic
-    modulus.
+  - This graph contradicts the claim above as the thickness 0.081
+    generally has a lower elastic modulus, the lower thicknesses shows
+    correlation with elastic modulus, contradicting the claim as the
+    material properties could be dependent on thickness.
 - Is this evidence *conclusive* one way or another?
-  - The evidence is not conclusive, as mentioned above the highest
-    thickness has the lowest values or E, there is no other correlation.
-    It would be useful to have more data points for different
-    thicknesses to see if there is a trend overall or not, and have a
-    conclusive conclusion.
+  - The evidence is not conclusive, it would be useful to have more data
+    points for different thicknesses to see if there is a trend overall
+    or not, and have a conclusive conclusion.
 
 # References
 

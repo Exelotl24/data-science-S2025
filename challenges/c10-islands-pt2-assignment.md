@@ -235,7 +235,12 @@ df_island %>%
     aes(x = `Number of Friends`, y = Serotonin, color = Income)
   ) +
   geom_point() +
-  scale_color_gradient(low = "deepskyblue", high = "darkred")
+  scale_color_gradient(low = "deepskyblue", high = "darkred")+
+labs(
+  title = "Serotonin Levels vs. # of Friends",
+  x = "Number of Friends",
+  y = "Serotonin (ng/mL)",
+)
 ```
 
 ![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
@@ -246,7 +251,12 @@ df_island %>%
     aes(x = Income, y = `Number of Friends`)
   ) +
   geom_point(color = "gray8") +
-  geom_smooth(color = "olivedrab")
+  geom_smooth(color = "olivedrab")+
+labs(
+  title = "Income vs. # of Friends",
+  x = "Islander's Total Money",
+  y = "Number of Friends",
+)
 ```
 
     ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
@@ -258,12 +268,7 @@ df_island %>%
   ggplot(
     aes(x = `Relationship Status`, y = Serotonin)
   ) +
-  geom_boxplot(color = "darkred")
-```
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
-
-``` r
+  geom_boxplot(color = "darkred") +
 labs(
   title = "Income vs. Serotonin Levels",
   x = "Islander's Total Money",
@@ -271,29 +276,14 @@ labs(
 )
 ```
 
-    ## $x
-    ## [1] "Islander's Total Money"
-    ## 
-    ## $y
-    ## [1] "Serotonin Levels (ng/mL)"
-    ## 
-    ## $title
-    ## [1] "Income vs. Serotonin Levels"
-    ## 
-    ## attr(,"class")
-    ## [1] "labels"
+![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 df_island %>%
   ggplot(
     aes(x = as.character(Loss), y = Serotonin)
   ) +
-  geom_boxplot(color = "aquamarine4")
-```
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
-
-``` r
+  geom_boxplot(color = "aquamarine4") +
 labs(
   title = "Income vs. Serotonin Levels",
   x = "Islander's Total Money",
@@ -301,17 +291,7 @@ labs(
 )
 ```
 
-    ## $x
-    ## [1] "Islander's Total Money"
-    ## 
-    ## $y
-    ## [1] "Serotonin Levels (ng/mL)"
-    ## 
-    ## $title
-    ## [1] "Income vs. Serotonin Levels"
-    ## 
-    ## attr(,"class")
-    ## [1] "labels"
+![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 df_island %>%
@@ -320,7 +300,12 @@ df_island %>%
   ggplot(
     aes(x = `Number of Friends`, y = mean)
   ) +
-  geom_col(fill = "peru")
+  geom_col(fill = "peru")+
+labs(
+  title = "# of Friends vs. Serotonin Levels",
+  x = "Number of Friends",
+  y = "mean Serotonin Levels (ng/mL)",
+)
 ```
 
 ![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->

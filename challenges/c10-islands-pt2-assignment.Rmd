@@ -28,7 +28,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -148,7 +148,12 @@ df_island %>%
     aes(x = `Number of Friends`, y = Serotonin, color = Income)
   ) +
   geom_point() +
-  scale_color_gradient(low = "deepskyblue", high = "darkred")
+  scale_color_gradient(low = "deepskyblue", high = "darkred")+
+labs(
+  title = "Serotonin Levels vs. # of Friends",
+  x = "Number of Friends",
+  y = "Serotonin (ng/mL)",
+)
 ```
 
 ```{r}
@@ -157,7 +162,12 @@ df_island %>%
     aes(x = Income, y = `Number of Friends`)
   ) +
   geom_point(color = "gray8") +
-  geom_smooth(color = "olivedrab")
+  geom_smooth(color = "olivedrab")+
+labs(
+  title = "Income vs. # of Friends",
+  x = "Islander's Total Money",
+  y = "Number of Friends",
+)
 ```
 
 ```{r}
@@ -165,7 +175,7 @@ df_island %>%
   ggplot(
     aes(x = `Relationship Status`, y = Serotonin)
   ) +
-  geom_boxplot(color = "darkred")
+  geom_boxplot(color = "darkred") +
 labs(
   title = "Income vs. Serotonin Levels",
   x = "Islander's Total Money",
@@ -178,7 +188,7 @@ df_island %>%
   ggplot(
     aes(x = as.character(Loss), y = Serotonin)
   ) +
-  geom_boxplot(color = "aquamarine4")
+  geom_boxplot(color = "aquamarine4") +
 labs(
   title = "Income vs. Serotonin Levels",
   x = "Islander's Total Money",
@@ -193,7 +203,12 @@ df_island %>%
   ggplot(
     aes(x = `Number of Friends`, y = mean)
   ) +
-  geom_col(fill = "peru")
+  geom_col(fill = "peru")+
+labs(
+  title = "# of Friends vs. Serotonin Levels",
+  x = "Number of Friends",
+  y = "mean Serotonin Levels (ng/mL)",
+)
 ```
 
 ### **q3** Key Analyses

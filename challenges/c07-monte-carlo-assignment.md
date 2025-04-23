@@ -314,16 +314,32 @@ print("Your assertions passed, but make sure they're checking the right thing!")
 
     ## [1] "Your assertions passed, but make sure they're checking the right thing!"
 
+``` r
+stat(1,1)
+```
+
+    ## [1] 0
+
+``` r
+stat(0.5, 0.5)
+```
+
+    ## [1] 4
+
 *Observations*
 
 - You chose a correct value of `stat(x, y)` when `x, y` is *outside* the
   circle. Why did you choose this value?
-  - I chose the value 0.5, 0.5 because I looked at the graph before q1
-    and saw that 0.5, 0.5 was inside of Sc which is inside the circle.
+  - The stat( ) value for outside of the circle was zero, indicating it
+    is outside of the circle. I chose the value 1, 1 to input because I
+    looked at the graph before q1 and saw that 1, 1 was inside of St
+    which is outside the circle.
 - You chose a correct value of `stat(x, y)` when `x, y` is *inside* the
   circle. Why did you choose this value?
-  - I chose the value 1, 1 because I looked at the graph before q1 and
-    saw that 1, 1 was inside of St which is outside the circle.
+  - The stat( ) value for outside of the circle was 4, indicating it is
+    inside of the circle. I chose the value 0.5, 0.5 because I looked at
+    the graph before q1 and saw that 0.5, 0.5 was inside of Sc which is
+    inside the circle.
 
 ### **q3** Estimate $\pi$
 
@@ -399,7 +415,7 @@ df_q4 <-
       function(split_df) {
         analysis(split_df) %>% 
            mutate(stat = stat(x,y)) %>% 
-            summarize(pi_est = mean(stat)) %>% 
+           summarize(pi_est = mean(stat)) %>% 
           # Estimate pi (pi_est) using the resampled data;
           # this should be *identical* to the
           # code you wrote for q3

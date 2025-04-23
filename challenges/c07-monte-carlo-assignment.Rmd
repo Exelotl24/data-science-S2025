@@ -24,7 +24,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -189,14 +189,16 @@ assertthat::assert_that(
   msg = "Incorrect value when a point is outside the circle"
 )
 print("Your assertions passed, but make sure they're checking the right thing!")
+stat(1,1)
+stat(0.5, 0.5)
 ```
 
 *Observations*
 
 -   You chose a correct value of `stat(x, y)` when `x, y` is *outside* the circle. Why did you choose this value?
-    -   I chose the value 0.5, 0.5 because I looked at the graph before q1 and saw that 0.5, 0.5 was inside of Sc which is inside the circle.
+    -   The stat( ) value for outside of the circle was zero, indicating it is outside of the circle. I chose the value 1, 1 to input because I looked at the graph before q1 and saw that 1, 1 was inside of St which is outside the circle.
 -   You chose a correct value of `stat(x, y)` when `x, y` is *inside* the circle. Why did you choose this value?
-    -   I chose the value 1, 1 because I looked at the graph before q1 and saw that 1, 1 was inside of St which is outside the circle.
+    -   The stat( ) value for outside of the circle was 4, indicating it is inside of the circle. I chose the value 0.5, 0.5 because I looked at the graph before q1 and saw that 0.5, 0.5 was inside of Sc which is inside the circle.
 
 ### **q3** Estimate $\pi$
 
@@ -250,7 +252,7 @@ df_q4 <-
       function(split_df) {
         analysis(split_df) %>% 
            mutate(stat = stat(x,y)) %>% 
-            summarize(pi_est = mean(stat)) %>% 
+           summarize(pi_est = mean(stat)) %>% 
           # Estimate pi (pi_est) using the resampled data;
           # this should be *identical* to the
           # code you wrote for q3

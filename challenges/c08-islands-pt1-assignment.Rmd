@@ -28,7 +28,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -132,7 +132,7 @@ print("Very good!")
 -   What last name is most prevalent in `df_sample_seq`?
     -   Sorenson
 -   Is this sample representative of *all* houses in Helvig? Why or why not?
-    -   This sample is only representative of houses 1-34 as it is a sample and only represents a portion of the population, the larger a sample is the more you can infer about a population
+    -   This sample is only representative of houses 1-25 as it is a sample and only represents a portion of the population, a larger random sample would be more representative of houses in Helvig as they will not show only houses next to each other.
 
 In the exercises, we talked about the importance of random sampling. In the previous challenge, we were able to *simulate* a random sample by running a few lines of code. But in the real world, we have to work harder to gather a random sample. We'll do this in two stages: *plan* then *collect*.
 
@@ -332,29 +332,28 @@ Choose a prevalent name that you found in q6. Use bootstrap resampling with your
 *Hint*: We learned how to do resampling-based inference in `e-stat09`.
 
 ```{r}
-# # TASK: Complete the code below to compute a bootstrap-based confidence interval
-# df_interval_bootstrap <- 
-#   df_sample_random %>% 
-#   bootstraps(., times = 1000) %>% 
-#   mutate(
-#     estimate = map(
-#       splits,
-#       function(split_df) {
-#         analysis(split_df) %>% 
-#          name_prevalence(last = "Collins") %>% 
-#           pull(estimate)
-#       }
-#     )
-#   ) %>% 
-# ## TODO: Finish this code, using the name_prevalence() helper you implemented
-# ## HINT: Remember that you need to use analysis() when operating on split_df
-# 
-#   ## NOTE: No need to edit this line; this uses your bootstrap sample to compute
-#   # a confidence `int`erval using the percentile method
-# 
-#   int_pctl(., estimate)
+# TASK: Complete the code below to compute a bootstrap-based confidence interval
+ df_interval_bootstrap <-
+   df_sample_random %>%
+   bootstraps(., times = 1000) %>%
+   mutate(
+     estimate = map(
+       splits,
+       function(split_df) {
+         analysis(split_df) %>%
+          name_prevalence(last = "Collins")
+       }
+     )
+   ) %>%
+## TODO: Finish this code, using the name_prevalence() helper you implemented
+## HINT: Remember that you need to use analysis() when operating on split_df
 
-#  df_interval_bootstrap 
+   ## NOTE: No need to edit this line; this uses your bootstrap sample to compute
+   # a confidence `int`erval using the percentile method
+
+   int_pctl(., estimate)
+
+  df_interval_bootstrap
 ```
 
 **Observations**:

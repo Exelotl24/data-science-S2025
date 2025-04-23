@@ -266,9 +266,10 @@ print("Very good!")
   - Sorenson
 - Is this sample representative of *all* houses in Helvig? Why or why
   not?
-  - This sample is only representative of houses 1-34 as it is a sample
-    and only represents a portion of the population, the larger a sample
-    is the more you can infer about a population
+  - This sample is only representative of houses 1-25 as it is a sample
+    and only represents a portion of the population, a larger random
+    sample would be more representative of houses in Helvig as they will
+    not show only houses next to each other.
 
 In the exercises, we talked about the importance of random sampling. In
 the previous challenge, we were able to *simulate* a random sample by
@@ -555,30 +556,34 @@ prevalence of that name. Answer the questions below.
 *Hint*: We learned how to do resampling-based inference in `e-stat09`.
 
 ``` r
-# # TASK: Complete the code below to compute a bootstrap-based confidence interval
-# df_interval_bootstrap <- 
-#   df_sample_random %>% 
-#   bootstraps(., times = 1000) %>% 
-#   mutate(
-#     estimate = map(
-#       splits,
-#       function(split_df) {
-#         analysis(split_df) %>% 
-#          name_prevalence(last = "Collins") %>% 
-#           pull(estimate)
-#       }
-#     )
-#   ) %>% 
-# ## TODO: Finish this code, using the name_prevalence() helper you implemented
-# ## HINT: Remember that you need to use analysis() when operating on split_df
-# 
-#   ## NOTE: No need to edit this line; this uses your bootstrap sample to compute
-#   # a confidence `int`erval using the percentile method
-# 
-#   int_pctl(., estimate)
+# TASK: Complete the code below to compute a bootstrap-based confidence interval
+ df_interval_bootstrap <-
+   df_sample_random %>%
+   bootstraps(., times = 1000) %>%
+   mutate(
+     estimate = map(
+       splits,
+       function(split_df) {
+         analysis(split_df) %>%
+          name_prevalence(last = "Collins")
+       }
+     )
+   ) %>%
+## TODO: Finish this code, using the name_prevalence() helper you implemented
+## HINT: Remember that you need to use analysis() when operating on split_df
 
-#  df_interval_bootstrap 
+   ## NOTE: No need to edit this line; this uses your bootstrap sample to compute
+   # a confidence `int`erval using the percentile method
+
+   int_pctl(., estimate)
+
+  df_interval_bootstrap
 ```
+
+    ## # A tibble: 1 × 6
+    ##   term       .lower .estimate .upper .alpha .method   
+    ##   <chr>       <dbl>     <dbl>  <dbl>  <dbl> <chr>     
+    ## 1 prevalence 0.0351     0.107  0.190   0.05 percentile
 
 **Observations**:
 

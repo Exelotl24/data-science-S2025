@@ -26,7 +26,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -166,7 +166,7 @@ $$\text{MOE} = 1.645 \times \text{SE}.$$
 df_q4 <-
   df_q3 %>%
   mutate(
-    income_SE = income_moe / 1.96,
+    income_SE = income_moe / 1.645,
     income_lo = income_estimate - 2.576 * income_SE,
     income_hi = income_estimate + 2.576 * income_SE,
     income_CV = income_SE / income_estimate
@@ -178,45 +178,45 @@ Use the following tests to check your work:
 
 ```{r q4-tests}
 ## NOTE: No need to edit
-# assertthat::assert_that(setequal(
-#   names(df_q4),
-#   c("Geography", "geographic_area_name", "category", "income_estimate", "income_moe",
-#     "income_SE", "income_lo", "income_hi", "income_CV")
-# ))
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_SE) - 4050.456
-#   ) / 4050.456 < 1e-3
-# )
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_lo) - 54513.72
-#   ) / 54513.72 < 1e-3
-# )
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_hi) - 75380.28
-#   ) / 75380.28 < 1e-3
-# )
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_CV) - 0.06236556
-#   ) / 0.06236556 < 1e-3
-# )
-# 
-# print("Nice!")
+ assertthat::assert_that(setequal(
+   names(df_q4),
+   c("Geography", "geographic_area_name", "category", "income_estimate", "income_moe",
+     "income_SE", "income_lo", "income_hi", "income_CV")
+ ))
+ 
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_SE) - 4050.456
+   ) / 4050.456 < 1e-3
+ )
+ 
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_lo) - 54513.72
+   ) / 54513.72 < 1e-3
+ )
+ 
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_hi) - 75380.28
+   ) / 75380.28 < 1e-3
+ )
+ 
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_CV) - 0.06236556
+   ) / 0.06236556 < 1e-3
+ )
+ 
+ print("Nice!")
 ```
 
 One last wrangling step: We need to join the two datasets so we can compare population with income.
@@ -305,9 +305,9 @@ ggplot(
 **Observations**:
 
 -   What *overall* trend do you see between `SE` and population? Why might this trend exist?
-    -   Generally, on a log scale, standard error decreases as population increases. This might happen because more data points decreases the standard error, larger samples are more accurate representations of the population.
+    -   Generally, on a log scale, standard error decreases as population increases. This might happen because more data points decreases the standard error, larger samples that are proportional to the target population are more accurate representations of the population. A larger population in general though would not lead to a larger sample size.
 -   What does this *overall* trend tell you about the relative ease of studying small vs large counties?
-    -   It can be more difficult to study smaller counties because there is a smaller population (less data points) so it may be less representative or accurate to a larger population.
+    -   It can be more difficult to study smaller counties because there is a smaller population, or a sample size not proportional to the population (less data points) so it may be less representative or accurate to a larger population.
 
 # Going Further
 
@@ -322,22 +322,19 @@ Now it's your turn! You have income data for every county in the United States: 
 df_data %>%
   filter(str_detect(geographic_area_name, "Virginia")) %>%
   mutate(
-    county = str_remove(geographic_area_name, " County,.*$"),
-    county = fct_reorder(county, income_estimate)
+    county = str_remove(geographic_area_name, " County,.*$")
   ) %>%
-  ggplot(aes(x = population_estimate, y = county, color = income_estimate)) +
-  geom_point(size = 3, alpha = 0.8) +  
-  scale_x_log10(labels = scales::comma) +  
-  scale_color_gradient(
-    low = "skyblue", 
-    high = "darkblue",
-    labels = scales::dollar 
-  ) +
+  slice_max(income_estimate, n = 20, with_ties = FALSE) %>%
+  ggplot(aes(x = population_estimate, y = income_estimate, color = county)) +
+  geom_point(size = 4, alpha = 0.8) +
+  scale_x_log10(labels = scales::comma) +
+  scale_y_continuous(labels = scales::dollar) +
+  theme_minimal() +
   labs(
-    title = "Virginia Counties: Population vs. Income",
+    title = "Top 20 Virginia Counties by Income: Population vs. Income",
     x = "Population (log scale)",
-    y = "County",
-    color = "Income Estimate ($)"
+    y = "Income Estimate ($)",
+    color = "County"
   )
 ```
 

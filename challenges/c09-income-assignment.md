@@ -329,7 +329,7 @@ $$\text{MOE} = 1.645 \times \text{SE}.$$
 df_q4 <-
   df_q3 %>%
   mutate(
-    income_SE = income_moe / 1.96,
+    income_SE = income_moe / 1.645,
     income_lo = income_estimate - 2.576 * income_SE,
     income_hi = income_estimate + 2.576 * income_SE,
     income_CV = income_SE / income_estimate
@@ -340,16 +340,16 @@ df_q4
     ## # A tibble: 16,100 × 9
     ##    Geography  geographic_area_name category income_estimate income_moe income_SE
     ##    <chr>      <chr>                <chr>              <dbl>      <dbl>     <dbl>
-    ##  1 0500000US… Autauga County, Ala… 2-perso…           64947       6663     3399.
-    ##  2 0500000US… Autauga County, Ala… 3-perso…           80172      14181     7235.
-    ##  3 0500000US… Autauga County, Ala… 4-perso…           85455      10692     5455.
-    ##  4 0500000US… Autauga County, Ala… 5-perso…           88601      20739    10581.
-    ##  5 0500000US… Autauga County, Ala… 6-perso…          103787      12387     6320.
-    ##  6 0500000US… Baldwin County, Ala… 2-perso…           63975       2297     1172.
-    ##  7 0500000US… Baldwin County, Ala… 3-perso…           79390       8851     4516.
-    ##  8 0500000US… Baldwin County, Ala… 4-perso…           88458       5199     2653.
-    ##  9 0500000US… Baldwin County, Ala… 5-perso…           91259       7011     3577.
-    ## 10 0500000US… Baldwin County, Ala… 6-perso…           69609      23175    11824.
+    ##  1 0500000US… Autauga County, Ala… 2-perso…           64947       6663     4050.
+    ##  2 0500000US… Autauga County, Ala… 3-perso…           80172      14181     8621.
+    ##  3 0500000US… Autauga County, Ala… 4-perso…           85455      10692     6500.
+    ##  4 0500000US… Autauga County, Ala… 5-perso…           88601      20739    12607.
+    ##  5 0500000US… Autauga County, Ala… 6-perso…          103787      12387     7530.
+    ##  6 0500000US… Baldwin County, Ala… 2-perso…           63975       2297     1396.
+    ##  7 0500000US… Baldwin County, Ala… 3-perso…           79390       8851     5381.
+    ##  8 0500000US… Baldwin County, Ala… 4-perso…           88458       5199     3160.
+    ##  9 0500000US… Baldwin County, Ala… 5-perso…           91259       7011     4262.
+    ## 10 0500000US… Baldwin County, Ala… 6-perso…           69609      23175    14088.
     ## # ℹ 16,090 more rows
     ## # ℹ 3 more variables: income_lo <dbl>, income_hi <dbl>, income_CV <dbl>
 
@@ -357,46 +357,68 @@ Use the following tests to check your work:
 
 ``` r
 ## NOTE: No need to edit
-# assertthat::assert_that(setequal(
-#   names(df_q4),
-#   c("Geography", "geographic_area_name", "category", "income_estimate", "income_moe",
-#     "income_SE", "income_lo", "income_hi", "income_CV")
-# ))
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_SE) - 4050.456
-#   ) / 4050.456 < 1e-3
-# )
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_lo) - 54513.72
-#   ) / 54513.72 < 1e-3
-# )
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_hi) - 75380.28
-#   ) / 75380.28 < 1e-3
-# )
-# 
-# assertthat::assert_that(
-#   abs(
-#     df_q4 %>%
-#     filter(Geography == "0500000US01001", category == "2-person families") %>%
-#     pull(income_CV) - 0.06236556
-#   ) / 0.06236556 < 1e-3
-# )
-# 
-# print("Nice!")
+ assertthat::assert_that(setequal(
+   names(df_q4),
+   c("Geography", "geographic_area_name", "category", "income_estimate", "income_moe",
+     "income_SE", "income_lo", "income_hi", "income_CV")
+ ))
 ```
+
+    ## [1] TRUE
+
+``` r
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_SE) - 4050.456
+   ) / 4050.456 < 1e-3
+ )
+```
+
+    ## [1] TRUE
+
+``` r
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_lo) - 54513.72
+   ) / 54513.72 < 1e-3
+ )
+```
+
+    ## [1] TRUE
+
+``` r
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_hi) - 75380.28
+   ) / 75380.28 < 1e-3
+ )
+```
+
+    ## [1] TRUE
+
+``` r
+ assertthat::assert_that(
+   abs(
+     df_q4 %>%
+     filter(Geography == "0500000US01001", category == "2-person families") %>%
+     pull(income_CV) - 0.06236556
+   ) / 0.06236556 < 1e-3
+ )
+```
+
+    ## [1] TRUE
+
+``` r
+ print("Nice!")
+```
+
+    ## [1] "Nice!"
 
 One last wrangling step: We need to join the two datasets so we can
 compare population with income.
@@ -419,16 +441,16 @@ df_data
     ## # A tibble: 16,100 × 13
     ##    Geography  geographic_area_name category income_estimate income_moe income_SE
     ##    <chr>      <chr>                <chr>              <dbl>      <dbl>     <dbl>
-    ##  1 0500000US… Autauga County, Ala… 2-perso…           64947       6663     3399.
-    ##  2 0500000US… Autauga County, Ala… 3-perso…           80172      14181     7235.
-    ##  3 0500000US… Autauga County, Ala… 4-perso…           85455      10692     5455.
-    ##  4 0500000US… Autauga County, Ala… 5-perso…           88601      20739    10581.
-    ##  5 0500000US… Autauga County, Ala… 6-perso…          103787      12387     6320.
-    ##  6 0500000US… Baldwin County, Ala… 2-perso…           63975       2297     1172.
-    ##  7 0500000US… Baldwin County, Ala… 3-perso…           79390       8851     4516.
-    ##  8 0500000US… Baldwin County, Ala… 4-perso…           88458       5199     2653.
-    ##  9 0500000US… Baldwin County, Ala… 5-perso…           91259       7011     3577.
-    ## 10 0500000US… Baldwin County, Ala… 6-perso…           69609      23175    11824.
+    ##  1 0500000US… Autauga County, Ala… 2-perso…           64947       6663     4050.
+    ##  2 0500000US… Autauga County, Ala… 3-perso…           80172      14181     8621.
+    ##  3 0500000US… Autauga County, Ala… 4-perso…           85455      10692     6500.
+    ##  4 0500000US… Autauga County, Ala… 5-perso…           88601      20739    12607.
+    ##  5 0500000US… Autauga County, Ala… 6-perso…          103787      12387     7530.
+    ##  6 0500000US… Baldwin County, Ala… 2-perso…           63975       2297     1396.
+    ##  7 0500000US… Baldwin County, Ala… 3-perso…           79390       8851     5381.
+    ##  8 0500000US… Baldwin County, Ala… 4-perso…           88458       5199     3160.
+    ##  9 0500000US… Baldwin County, Ala… 5-perso…           91259       7011     4262.
+    ## 10 0500000US… Baldwin County, Ala… 6-perso…           69609      23175    14088.
     ## # ℹ 16,090 more rows
     ## # ℹ 7 more variables: income_lo <dbl>, income_hi <dbl>, income_CV <dbl>,
     ## #   `Geographic Area Name` <chr>, population_estimate <dbl>,
@@ -540,13 +562,16 @@ ggplot(
   this trend exist?
   - Generally, on a log scale, standard error decreases as population
     increases. This might happen because more data points decreases the
-    standard error, larger samples are more accurate representations of
-    the population.
+    standard error, larger samples that are proportional to the target
+    population are more accurate representations of the population. A
+    larger population in general though would not lead to a larger
+    sample size.
 - What does this *overall* trend tell you about the relative ease of
   studying small vs large counties?
   - It can be more difficult to study smaller counties because there is
-    a smaller population (less data points) so it may be less
-    representative or accurate to a larger population.
+    a smaller population, or a sample size not proportional to the
+    population (less data points) so it may be less representative or
+    accurate to a larger population.
 
 # Going Further
 
@@ -562,31 +587,21 @@ States: Pose your own question and try to answer it with the data.
 df_data %>%
   filter(str_detect(geographic_area_name, "Virginia")) %>%
   mutate(
-    county = str_remove(geographic_area_name, " County,.*$"),
-    county = fct_reorder(county, income_estimate)
+    county = str_remove(geographic_area_name, " County,.*$")
   ) %>%
-  ggplot(aes(x = population_estimate, y = county, color = income_estimate)) +
-  geom_point(size = 3, alpha = 0.8) +  
-  scale_x_log10(labels = scales::comma) +  
-  scale_color_gradient(
-    low = "skyblue", 
-    high = "darkblue",
-    labels = scales::dollar 
-  ) +
+  slice_max(income_estimate, n = 20, with_ties = FALSE) %>%
+  ggplot(aes(x = population_estimate, y = income_estimate, color = county)) +
+  geom_point(size = 4, alpha = 0.8) +
+  scale_x_log10(labels = scales::comma) +
+  scale_y_continuous(labels = scales::dollar) +
+  theme_minimal() +
   labs(
-    title = "Virginia Counties: Population vs. Income",
+    title = "Top 20 Virginia Counties by Income: Population vs. Income",
     x = "Population (log scale)",
-    y = "County",
-    color = "Income Estimate ($)"
+    y = "Income Estimate ($)",
+    color = "County"
   )
 ```
-
-    ## Warning: There was 1 warning in `mutate()`.
-    ## ℹ In argument: `county = fct_reorder(county, income_estimate)`.
-    ## Caused by warning:
-    ## ! `fct_reorder()` removing 67 missing values.
-    ## ℹ Use `.na_rm = TRUE` to silence this message.
-    ## ℹ Use `.na_rm = FALSE` to preserve NAs.
 
 ![](c09-income-assignment_files/figure-gfm/q8-task-1.png)<!-- -->
 

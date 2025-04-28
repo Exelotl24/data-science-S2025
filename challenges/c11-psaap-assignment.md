@@ -192,7 +192,7 @@ glimpse(df_psaap)
 
 **Observations**:
 
-- (Take notes here!)
+- There are 22 variables and they are all discrete.
 
 The important variables in this dataset are:
 
@@ -236,7 +236,7 @@ of fluid, for different experimental settings (e.g. different dimensions
 df_psaap %>% 
 ggplot(
   aes(x = x, y = T_norm, color = idx, group = idx)) +
-  geom_point() +
+  geom_line(aes(group = idx)) +
   labs(title = "Normalized Fluid Temperature Rise vs. Channel Position",
        x = "Channel Location (x)",
        y = expression(T[norm]),
@@ -315,8 +315,8 @@ data.frame(
 **Observations**:
 
 - Which model is *most accurate*? Which is *least accurate*?
-  - The most accurate model is the baseline while the nonphysical model
-    is the least accurate.
+  - The most accurate model is the cheat while the nonphysical model is
+    the least accurate.
 - What *Category* of variable is `avg_T`? Why is it such an effective
   predictor?
   - avg_T is the output plane-averaged fluid temperature, it is an
@@ -399,7 +399,10 @@ df_psaap %>%
     out because we don’t care about outputs or metadata to calculate
     T_norm, except for avg_T, but you can find that using other data.
 
-  ## Which inputs are *statistically significant*, according to the model?
+- Which inputs are *statistically significant*, according to the model?
+
+  - According to the model, x, W, L, I_0, U_0, d_p, and C_fp are
+    statistically significant.
 
 - What is the regression coefficient for `x`? What about the regression
   coefficient for `T_f`?
@@ -414,7 +417,8 @@ df_psaap %>%
 - How do these standard deviations relate to the regression coefficients
   for `x` and `T_f`?
 
-  - Inversely
+  - They relate by scaling the regression coefficients 𝑥, but x doesn’t
+    vary by just one unit, it varies across its standard deviation
 
 - Note that literally *all* of the inputs above have *some* effect on
   the output `T_norm`; so they are all “significant” in that sense. What
@@ -423,7 +427,9 @@ df_psaap %>%
 
   - There is a cutoff for statistical significance and the cutoff is
     relatively arbitrary some variables are more correlated than others,
-    but its correlation not causation
+    but with “statistically insignificant” values, they still affect the
+    data. but there is not enough data to estimate the effect with
+    confidence.
 
 ## Contrasting CI and PI
 
@@ -583,8 +589,8 @@ bind_rows(
 - How many predictors does the `fit_simple` model need in order to make
   a prediction? What about your model `fit_q4`?
 
-  - fit_simple uses one predictor, x, while fit_q4 uses four, x, L, T_f,
-    and d_p.
+  - fit_simple uses one predictor, x, while fit_q4 uses all predictors
+    except for idx, avg_q, avg_T, and rms_T.
 
   ## How many predictors does the `fit_simple` model need in order to make a prediction? What about your model `fit_q4`?
 
